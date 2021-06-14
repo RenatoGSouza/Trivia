@@ -63,9 +63,6 @@ class Login extends React.Component {
             onChange={ ({ target: { value } }) => this.validateEmail(value) }
           />
         </label>
-        <button type="submit" data-testid="btn-play" disabled={ validForm }>
-          Jogar
-        </button>
         <button
           type="button"
           data-testid="btn-settings"
