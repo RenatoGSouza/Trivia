@@ -25,7 +25,7 @@ class Login extends React.Component {
       <form>
         <label htmlFor="name">
           NAME
-          <input type="text" data-testid="input-player-name" id="name" isRequired />
+          <input type="text" data-testid="input-player-name" id="name" />
         </label>
         <label htmlFor="email">
           EMAIL
