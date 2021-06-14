@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 // import PropTypes from 'prop-types'
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state= {
-      playerGravatar:'',
-      playerName:'',
+    this.state = {
+      playerGravatar: '',
+      playerName: '',
       playerScore: 0,
-    }
+    };
   }
+
   render() {
-    const {playerGravatar, playerName, playerScore } = this.state;
+    const { playerGravatar, playerName, playerScore } = this.state;
     return (
       <header>
         <img
@@ -33,7 +34,7 @@ class Header extends Component {
           { playerScore }
         </span>
       </header>
-    )
+    );
   }
 }
 
