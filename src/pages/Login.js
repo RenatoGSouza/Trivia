@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import triviaAPI from '../Services/api';
 
 class Login extends React.Component {
   constructor(props) {
@@ -19,22 +21,23 @@ class Login extends React.Component {
     }
   }
 
+  async clickBtnJogar() {
+    const { token } = await triviaAPI();
+    localStorage.setItem('token', token);
+  }
+
   render() {
     const { validForm } = this.state;
     return (
       <form>
         <label htmlFor="name">
           NAME
-<<<<<<< HEAD
-          <input type="text" data-testid="input-player-name" id="name" />
-=======
           <input
             type="text"
             data-testid="input-player-name"
             id="name"
             onChange={ this.validateEmail }
           />
->>>>>>> 0bbec2a589fcb0d23d50b4bf66fcb996ccdaf497
         </label>
         <label htmlFor="email">
           EMAIL
@@ -45,7 +48,16 @@ class Login extends React.Component {
             onChange={ ({ target: { value } }) => this.validateEmail(value) }
           />
         </label>
-        <button type="submit" data-testid="btn-play" disabled={ validForm }>Jogar</button>
+        <Link to="/jogar">
+          <button
+            type="submit"
+            data-testid="btn-play"
+            disabled={ validForm }
+            onClick={ this.clickBtnJogar }
+          >
+            Jogar
+          </button>
+        </Link>
       </form>
     );
   }
