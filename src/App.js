@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './trivia.png';
 import Login from './pages/Login';
+import Game from './pages/Game';
+
 import './App.css';
 
 export default function App() {
@@ -12,6 +14,7 @@ export default function App() {
           SUA VEZ
         </p>
         <Login />
+        <Game />
       </header>
     </div>
   );
