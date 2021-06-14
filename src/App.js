@@ -14,7 +14,9 @@ export default function App() {
     //       SUA VEZ
     //     </p>
     <Switch>
-      <Route path="/" component={ Login } />
+      <Route exact path="/" component={ Login } />
+      {/* <Route exact path="/" component={ Home } /> */}
+      <Route exact path="/configs" component={ Configs } />
       <Route path="/jogar" component={ Game } />
     </Switch>
     //   </header>

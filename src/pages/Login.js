@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
-
-import triviaAPI from '../Services/api';
+import { triviaAPI } from '../Services/api';
 
 class Login extends React.Component {
   constructor(props) {
