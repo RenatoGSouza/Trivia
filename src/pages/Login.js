@@ -1,5 +1,6 @@
 import React from 'react';
-import { triviaAPI } from '../Services/api';
+import { Link } from 'react-router-dom';
+import triviaAPI from '../Services/api';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,13 +21,12 @@ class Login extends React.Component {
     }
   }
 
-  async api() {
-    const resul = await triviaAPI();
-    console.log(resul);
+  async clickBtnJogar() {
+    const { token } = await triviaAPI();
+    localStorage.setItem('token', token);
   }
 
   render() {
-    this.api();
     const { validForm } = this.state;
     return (
       <form>
@@ -48,7 +48,16 @@ class Login extends React.Component {
             onChange={ ({ target: { value } }) => this.validateEmail(value) }
           />
         </label>
-        <button type="submit" data-testid="btn-play" disabled={ validForm }>Jogar</button>
+        <Link to="/jogar">
+          <button
+            type="submit"
+            data-testid="btn-play"
+            disabled={ validForm }
+            onClick={ this.clickBtnJogar }
+          >
+            Jogar
+          </button>
+        </Link>
       </form>
     );
   }
