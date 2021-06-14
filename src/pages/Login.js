@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { triviaAPI } from '../Services/api';
 
 class Login extends React.Component {
@@ -7,8 +7,17 @@ class Login extends React.Component {
     super(props);
     this.state = {
       validForm: true,
+      redirect: false,
     };
+
     this.validateEmail = this.validateEmail.bind(this);
+    this.redirect = this.redirect.bind(this);
+  }
+
+  redirect() {
+    this.setState({
+      redirect: true,
+    });
   }
 
   validateEmail(email) {
@@ -27,7 +36,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const { validForm } = this.state;
+    const { validForm, redirect } = this.state;
+
+    if (redirect) {
+      return <Redirect to="/configs" />;
+    }
+
     return (
       <form>
         <label htmlFor="name">
@@ -48,6 +62,16 @@ class Login extends React.Component {
             onChange={ ({ target: { value } }) => this.validateEmail(value) }
           />
         </label>
+        <button type="submit" data-testid="btn-play" disabled={ validForm }>
+          Jogar
+        </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ () => this.redirect() }
+        >
+          Configurações
+        </button>
         <Link to="/jogar">
           <button
             type="submit"
