@@ -10,9 +10,9 @@ class Login extends React.Component {
   }
 
   validateEmail(email) {
-    const nameInput = document.querySelector('#name').innerHTML;
+    const nameInput = document.querySelector('#name').value;
     const re = /\S+@\S+\.\S+/;
-    if (re.test(email) && (nameInput.length > 0)) {
+    if ((re.test(email)) && (nameInput.length > 0)) {
       this.setState({
         validForm: false,
       });
@@ -25,7 +25,12 @@ class Login extends React.Component {
       <form>
         <label htmlFor="name">
           NAME
-          <input type="text" data-testid="input-player-name" id="name" isRequired />
+          <input
+            type="text"
+            data-testid="input-player-name"
+            id="name"
+            onChange={ this.validateEmail }
+          />
         </label>
         <label htmlFor="email">
           EMAIL
