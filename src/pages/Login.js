@@ -21,17 +21,12 @@ class Login extends React.Component {
     }
   }
 
-  clickBtnJogar() {
-
-  }
-
-  async api() {
-    const resul = await triviaAPI();
-    console.log(resul);
+  async clickBtnJogar() {
+    const { token } = await triviaAPI();
+    localStorage.setItem('token', token);
   }
 
   render() {
-    console.log(this.api());
     const { validForm } = this.state;
     return (
       <form>
