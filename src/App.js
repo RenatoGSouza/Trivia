@@ -1,6 +1,8 @@
 import React from 'react';
+import { Route, Switch } from 'react-router';
 import logo from './trivia.png';
 import Login from './pages/Login';
+import Game from './pages/Game';
 import './App.css';
 
 export default function App() {
@@ -11,7 +13,10 @@ export default function App() {
         <p>
           SUA VEZ
         </p>
-        <Login />
+        <Switch>
+          <Route path="/" component={ Login } />
+          <Route path="/jogar" component={ Game } />
+        </Switch>
       </header>
     </div>
   );
