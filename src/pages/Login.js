@@ -24,7 +24,7 @@ class Login extends React.Component {
 
   async api() {
     const resul = await triviaAPI();
-    return resul;
+    console.log(resul);
   }
 
   render() {
