@@ -6,7 +6,7 @@ class Header extends Component {
     super(props);
     this.state = {
       playerGravatar: '',
-      playerName: '',
+      playerName: 'Thiago',
       playerScore: 0,
     };
   }
