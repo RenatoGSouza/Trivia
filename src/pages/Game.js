@@ -10,6 +10,7 @@ class Game extends React.Component {
       questao: 0,
     };
     this.api = this.api.bind(this);
+    this.buttonEffect = this.buttonEffect.bind(this);
   }
 
   componentDidMount() {
@@ -25,16 +26,15 @@ class Game extends React.Component {
     });
   }
 
-  correctClick({ target }) {
-    target.style.border = 'green 2px solid';
-    const alternativas = document.querySelector('.wrong-answer');
-    alternativas.disabled = true;
-  }
-
-  incorrectClick({ target }) {
-    target.style.border = 'red 2px solid';
-    const alternativa = document.querySelector('.correct-answer');
-    alternativa.disabled = true;
+  buttonEffect() {
+    const buttonWrong = document.querySelectorAll('.wrong-answer');
+    const buttonCorrect = document.querySelectorAll('.correct-answer');
+    buttonWrong.forEach((button) => {
+      button.style.border = '3px solid rgb(255, 0, 0)';
+    });
+    buttonCorrect.forEach((button) => {
+      button.style.border = '3px solid rgb(6, 240, 15)';
+    });
   }
 
   render() {
@@ -43,12 +43,6 @@ class Game extends React.Component {
       return (
         <section className="sectionPerguntas">
           <Header />
-          {/* {console.log(perguntas[questao])}
-          {perguntas.map(({ category,
-          question,
-          incorrect_answers: incorrect,
-          correct_answer: correct,
-        }) => ( */}
           <article>
             <p data-testid="question-category">{ perguntas[questao].category }</p>
             <p data-testid="question-text">{ perguntas[questao].question }</p>
@@ -58,7 +52,7 @@ class Game extends React.Component {
                 className="wrong-answer"
                 data-testid={ `wrong-answer-${index}` }
                 key={ alternativas }
-                onClick={ this.incorrectClick }
+                onClick={ this.buttonEffect }
               >
                 { alternativas }
               </button>
@@ -67,13 +61,12 @@ class Game extends React.Component {
               type="button"
               className="correct-answer"
               data-testid="correct-answer"
-              onClick={ this.correctClick }
+              key={ perguntas[questao].correct }
+              onClick={ this.buttonEffect }
             >
               { perguntas[questao].correct_answer }
 
             </button>
-            {/* <hr />
-        ))} */}
           </article>
         </section>
 
