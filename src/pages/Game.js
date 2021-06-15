@@ -9,6 +9,7 @@ class Game extends React.Component {
       perguntas: [],
     };
     this.api = this.api.bind(this);
+    this.buttonEffect = this.buttonEffect.bind(this);
   }
 
   componentDidMount() {
@@ -20,6 +21,17 @@ class Game extends React.Component {
     console.log(perguntas.results);
     this.setState({
       perguntas: perguntas.results,
+    });
+  }
+
+  buttonEffect() {
+    const buttonWrong = document.querySelectorAll('.wrong-answer');
+    const buttonCorrect = document.querySelectorAll('.correct-answer');
+    buttonWrong.forEach((button) => {
+      button.style.border = '3px solid rgb(255, 0, 0)';
+    });
+    buttonCorrect.forEach((button) => {
+      button.style.border = '3px solid rgb(6, 240, 15)';
     });
   }
 
@@ -42,6 +54,7 @@ class Game extends React.Component {
                 className="wrong-answer"
                 data-testid={ `wrong-answer-${index}` }
                 key={ alternativas }
+                onClick={ this.buttonEffect }
               >
                 { alternativas }
               </button>
@@ -51,6 +64,7 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ correct }
+              onClick={ this.buttonEffect }
             >
               { correct }
 
