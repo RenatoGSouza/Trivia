@@ -15,8 +15,10 @@ class Game extends React.Component {
       fiveSecCount: 5,
       disableButton: false,
       disableCorrectButton: false,
+      questao: 0,
     };
     this.api = this.api.bind(this);
+    this.buttonEffect = this.buttonEffect.bind(this);
   }
 
   componentDidMount() {
@@ -60,34 +62,45 @@ class Game extends React.Component {
     console.log(perguntas.results);
     this.setState({
       perguntas: perguntas.results,
+      questao: 0,
+    });
+  }
+
+  buttonEffect() {
+    const buttonWrong = document.querySelectorAll('.wrong-answer');
+    const buttonCorrect = document.querySelectorAll('.correct-answer');
+    buttonWrong.forEach((button) => {
+      button.style.border = '3px solid rgb(255, 0, 0)';
+    });
+    buttonCorrect.forEach((button) => {
+      button.style.border = '3px solid rgb(6, 240, 15)';
     });
   }
 
   render() {
     const {
       perguntas,
+      questao,
       currentCount,
       disableButton,
-      disableCorrectButton } = this.state;
+      disableCorrectButton,
+    } = this.state;
 
-    return (
-      <section className="sectionPerguntas">
-        <Header />
-        {perguntas.map(({ category,
-          question,
-          incorrect_answers: incorrect,
-          correct_answer: correct,
-        }) => (
-          <article key={ category }>
-            <p data-testid="question-category" key={ category }>{ category }</p>
-            <p data-testid="question-text" key={ question }>{ question }</p>
-            {incorrect.map((alternativas, index) => (
+    if (perguntas.length !== 0) {
+      return (
+        <section className="sectionPerguntas">
+          <Header />
+          <article>
+            <p data-testid="question-category">{ perguntas[questao].category }</p>
+            <p data-testid="question-text">{ perguntas[questao].question }</p>
+            {perguntas[questao].incorrect_answers.map((alternativas, index) => (
               <button
                 type="button"
                 className="wrong-answer"
                 data-testid={ `wrong-answer-${index}` }
                 key={ alternativas }
                 disabled={ disableButton }
+                onClick={ this.buttonEffect }
               >
                 { alternativas }
               </button>
@@ -96,20 +109,20 @@ class Game extends React.Component {
               type="button"
               className="correct-answer"
               data-testid="correct-answer"
-              key={ correct }
+              key={ perguntas[questao].correct }
               disabled={ disableCorrectButton }
             >
-              { correct }
+              { perguntas[questao].correct_answer }
             </button>
-            <hr />
           </article>
-        ))}
-        <p>
-          Tempo restante:
-          {currentCount}
-        </p>
-      </section>
-    );
+          <p>
+            Tempo restante:
+            {currentCount}
+          </p>
+        </section>
+      );
+    }
+    return null;
   }
 }
 
