@@ -1,4 +1,4 @@
-export const PLAYER = 'PLAYER'; 
+export const PLAYER = 'PLAYER';
 export const GRAVATAR = 'GRAVATAR';
 export const SCORE = 'SCORE';
 
@@ -7,8 +7,8 @@ export function playerAction(name) {
     type: PLAYER,
     payload: {
       name,
-    }
-  }
+    },
+  };
 }
 
 export function gravatarAction(email) {
@@ -16,8 +16,8 @@ export function gravatarAction(email) {
     type: GRAVATAR,
     payload: {
       email,
-    }
-  }
+    },
+  };
 }
 
 export function scoreAction(score) {
@@ -25,6 +25,6 @@ export function scoreAction(score) {
     type: SCORE,
     payload: {
       score,
-    }
-  }
+    },
+  };
 }
