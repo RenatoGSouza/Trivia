@@ -5,8 +5,16 @@ import Header from '../components/Header';
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.timer = this.timer.bind(this);
+    this.fiveSeconds = this.fiveSeconds.bind(this);
+    this.timerCorrectAnswer = this.timerCorrectAnswer.bind(this);
+
     this.state = {
       perguntas: [],
+      currentCount: 30,
+      fiveSecCount: 5,
+      disableButton: false,
+      disableCorrectButton: false,
       questao: 0,
     };
     this.api = this.api.bind(this);
@@ -16,6 +24,38 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.api();
+    const MIL = 1000;
+    this.intervalId = setInterval(this.timer, MIL);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  fiveSeconds() {
+    const MIL = 1000;
+    this.intervalId = setInterval(this.timerCorrectAnswer, MIL);
+  }
+
+  timerCorrectAnswer() {
+    const { fiveSecCount } = this.state;
+    this.setState({ fiveSecCount: fiveSecCount - 1 });
+    if (fiveSecCount === 0) {
+      clearInterval(this.intervalId);
+      this.setState({ disableCorrectButton: false });
+    }
+  }
+
+  timer() {
+    const { currentCount } = this.state;
+    this.setState({
+      currentCount: currentCount - 1,
+    });
+    if (currentCount <= 1) {
+      clearInterval(this.intervalId);
+      this.setState({ disableButton: true, disableCorrectButton: true });
+      this.fiveSeconds();
+    }
   }
 
   async api() {
@@ -27,11 +67,27 @@ class Game extends React.Component {
     });
   }
 
-  adicionaPlacar() {
-    localStorage.setItem('placar', 'formula do placar');
+  adicionaPlacar(button) {
+    let placarAtual = localstorage.setItem('placar', 0);
+    const dez = 10;
+    const { currentCount, perguntas } = this.state;
+    if (button.className === 'correct-answer') {
+      perguntas.forEach((pergunta) => {
+        if(pergunta.difficulty === 'easy') {
+          const placarEasy = localStorage.setItem('placar', `${dez + (currentCount * 1)}`);
+          placarAtual += placarEasy;
+        }
+        if(pergunta.difficulty === 'medium') {
+          const localStorage.setItem('placar', `${dez + (currentCount * 2)}`);
+        }
+        if(pergunta.difficulty === 'hard') {
+          localStorage.setItem('placar', `${dez + (currentCount * 3)}`);
+        }
+      })
+    }
   }
-
-  buttonEffect() {
+  
+  buttonEffect({ target }) {
     const buttonWrong = document.querySelectorAll('.wrong-answer');
     const buttonCorrect = document.querySelectorAll('.correct-answer');
     buttonWrong.forEach((button) => {
@@ -40,10 +96,19 @@ class Game extends React.Component {
     buttonCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
     });
+    clearInterval(this.intervalId);
+    this.adicionaPlacar(target);
   }
 
   render() {
-    const { perguntas, questao } = this.state;
+    const {
+      perguntas,
+      questao,
+      currentCount,
+      disableButton,
+      disableCorrectButton,
+    } = this.state;
+
     if (perguntas.length !== 0) {
       return (
         <section className="sectionPerguntas">
@@ -57,6 +122,7 @@ class Game extends React.Component {
                 className="wrong-answer"
                 data-testid={ `wrong-answer-${index}` }
                 key={ alternativas }
+                disabled={ disableButton }
                 onClick={ this.buttonEffect }
               >
                 { alternativas }
@@ -67,14 +133,17 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
-              onClick={ this.buttonEffect, this.adicionaPlacar() }
+              disabled={ disableCorrectButton }
+              onClick={ this.buttonEffect }
             >
               { perguntas[questao].correct_answer }
-
             </button>
           </article>
+          <p>
+            Tempo restante:
+            {currentCount}
+          </p>
         </section>
-
       );
     }
     return null;
