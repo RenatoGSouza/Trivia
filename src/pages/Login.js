@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,8 +9,6 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
       validForm: true,
       redirect: false,
     };
@@ -92,9 +91,14 @@ class Login extends React.Component {
   }
 }
 
+Login.propTypes = {
+  playerImg: PropTypes.func.isRequired,
+  playerName: PropTypes.func.isRequired,
+};
+
 const mapDispatchToProps = (dispatch) => ({
   playerName: (name) => dispatch(playerAction(name)),
   playerImg: (email) => dispatch(gravatarAction(email)),
-})
+});
 
 export default connect(null, mapDispatchToProps)(Login);

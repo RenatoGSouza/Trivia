@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 class Header extends Component {
-
   render() {
     const { playerName, playerGravatar, playerScore } = this.props;
     const hash = md5(playerGravatar).toString();
@@ -33,9 +32,15 @@ class Header extends Component {
   }
 }
 
+Header.propTypes = {
+  playerGravatar: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
+  playerScore: PropTypes.number.isRequired,
+};
+
 const mapStateToProps = (state) => ({
   playerName: state.playerReducer.playerName,
   playerImg: state.playerReducer.playerGravatar,
-})
+});
 
 export default connect(mapStateToProps)(Header);
