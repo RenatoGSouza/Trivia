@@ -11,6 +11,7 @@ class Game extends React.Component {
     };
     this.api = this.api.bind(this);
     this.buttonEffect = this.buttonEffect.bind(this);
+    this.adicionaPlacar = this.adicionaPlacar.bind(this);
   }
 
   componentDidMount() {
@@ -24,6 +25,10 @@ class Game extends React.Component {
       perguntas: perguntas.results,
       questao: 0,
     });
+  }
+
+  adicionaPlacar() {
+    localStorage.setItem('placar', 'formula do placar');
   }
 
   buttonEffect() {
@@ -62,7 +67,7 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
-              onClick={ this.buttonEffect }
+              onClick={ this.buttonEffect, this.adicionaPlacar() }
             >
               { perguntas[questao].correct_answer }
 
