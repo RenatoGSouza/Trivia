@@ -7,6 +7,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       perguntas: [],
+      questao: 0,
     };
     this.api = this.api.bind(this);
     this.buttonEffect = this.buttonEffect.bind(this);
@@ -21,6 +22,7 @@ class Game extends React.Component {
     console.log(perguntas.results);
     this.setState({
       perguntas: perguntas.results,
+      questao: 0,
     });
   }
 
@@ -36,19 +38,15 @@ class Game extends React.Component {
   }
 
   render() {
-    const { perguntas } = this.state;
-    return (
-      <section className="sectionPerguntas">
-        <Header />
-        {perguntas.map(({ category,
-          question,
-          incorrect_answers: incorrect,
-          correct_answer: correct,
-        }) => (
-          <article key={ category }>
-            <p data-testid="question-category" key={ category }>{ category }</p>
-            <p data-testid="question-text" key={ question }>{ question }</p>
-            {incorrect.map((alternativas, index) => (
+    const { perguntas, questao } = this.state;
+    if (perguntas.length !== 0) {
+      return (
+        <section className="sectionPerguntas">
+          <Header />
+          <article>
+            <p data-testid="question-category">{ perguntas[questao].category }</p>
+            <p data-testid="question-text">{ perguntas[questao].question }</p>
+            {perguntas[questao].incorrect_answers.map((alternativas, index) => (
               <button
                 type="button"
                 className="wrong-answer"
@@ -63,17 +61,18 @@ class Game extends React.Component {
               type="button"
               className="correct-answer"
               data-testid="correct-answer"
-              key={ correct }
+              key={ perguntas[questao].correct }
               onClick={ this.buttonEffect }
             >
-              { correct }
+              { perguntas[questao].correct_answer }
 
             </button>
-            <hr />
           </article>
-        ))}
-      </section>
-    );
+        </section>
+
+      );
+    }
+    return null;
   }
 }
 
