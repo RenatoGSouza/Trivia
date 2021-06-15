@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Game from './pages/Game';
 import Login from './pages/Login';
 import './App.css';
+import Configs from './pages/Configs';
 
 export default function App() {
   return (
