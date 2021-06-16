@@ -1,6 +1,8 @@
 import React from 'react';
 import { triviaPerguntas } from '../Services/api';
 import Header from '../components/Header';
+import { connect } from 'react-redux';
+import { scoreAction } from '../actions';
 
 class Game extends React.Component {
   constructor(props) {
@@ -26,6 +28,7 @@ class Game extends React.Component {
     this.api();
     const MIL = 1000;
     this.intervalId = setInterval(this.timer, MIL);
+    const placarAtual = 0;
   }
 
   componentWillUnmount() {
@@ -68,20 +71,19 @@ class Game extends React.Component {
   }
 
   adicionaPlacar(button) {
-    let placarAtual = localstorage.setItem('placar', 0);
     const dez = 10;
     const { currentCount, perguntas } = this.state;
+    const { playerScore, score } = this.props;
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if(pergunta.difficulty === 'easy') {
-          const placarEasy = localStorage.setItem('placar', `${dez + (currentCount * 1)}`);
-          placarAtual += placarEasy;
+          (score(playerScore + (dez + (currentCount * 1))));
         }
         if(pergunta.difficulty === 'medium') {
-          const localStorage.setItem('placar', `${dez + (currentCount * 2)}`);
+          (score(playerScore + (dez + (currentCount * 2))));
         }
         if(pergunta.difficulty === 'hard') {
-          localStorage.setItem('placar', `${dez + (currentCount * 3)}`);
+          (score(playerScore + (dez + (currentCount * 3))));
         }
       })
     }
@@ -150,4 +152,12 @@ class Game extends React.Component {
   }
 }
 
-export default Game;
+const mapStateToProps = (state) => ({
+  playerScore: state.playerReducer.playerScore,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  score: (score) => dispatch(scoreAction(score)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
