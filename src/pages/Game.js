@@ -75,6 +75,7 @@ class Game extends React.Component {
     buttonCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
     });
+    clearInterval(this.intervalId);
   }
 
   render() {
@@ -110,6 +111,7 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
+              onClick={ this.buttonEffect }
               disabled={ disableCorrectButton }
             >
               { perguntas[questao].correct_answer }
