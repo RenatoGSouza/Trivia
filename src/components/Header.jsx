@@ -25,7 +25,7 @@ class Header extends Component {
           data-testid="header-score"
           className="header-score"
         >
-          { `Pontuação atual: ${ playerScore }` }
+          { `Pontuação atual: ${playerScore}` }
         </span>
       </header>
     );

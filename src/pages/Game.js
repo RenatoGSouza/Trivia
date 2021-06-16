@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
 import { triviaPerguntas } from '../Services/api';
 import Header from '../components/Header';
-import { connect } from 'react-redux';
 import { scoreAction } from '../actions';
 
 class Game extends React.Component {
@@ -28,7 +29,6 @@ class Game extends React.Component {
     this.api();
     const MIL = 1000;
     this.intervalId = setInterval(this.timer, MIL);
-    const placarAtual = 0;
   }
 
   componentWillUnmount() {
@@ -72,23 +72,26 @@ class Game extends React.Component {
 
   adicionaPlacar(button) {
     const dez = 10;
+    const um = 1;
+    const dois = 2;
+    const tres = 3;
     const { currentCount, perguntas } = this.state;
     const { playerScore, score } = this.props;
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
-        if(pergunta.difficulty === 'easy') {
-          (score(playerScore + (dez + (currentCount * 1))));
+        if (pergunta.difficulty === 'easy') {
+          (score(playerScore + (dez + (currentCount * um))));
         }
-        if(pergunta.difficulty === 'medium') {
-          (score(playerScore + (dez + (currentCount * 2))));
+        if (pergunta.difficulty === 'medium') {
+          (score(playerScore + (dez + (currentCount * dois))));
         }
-        if(pergunta.difficulty === 'hard') {
-          (score(playerScore + (dez + (currentCount * 3))));
+        if (pergunta.difficulty === 'hard') {
+          (score(playerScore + (dez + (currentCount * tres))));
         }
-      })
+      });
     }
   }
-  
+
   buttonEffect({ target }) {
     const buttonWrong = document.querySelectorAll('.wrong-answer');
     const buttonCorrect = document.querySelectorAll('.correct-answer');
@@ -151,6 +154,11 @@ class Game extends React.Component {
     return null;
   }
 }
+
+Game.propTypes = {
+  playerScore: PropTypes.number.isRequired,
+  score: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   playerScore: state.playerReducer.playerScore,
