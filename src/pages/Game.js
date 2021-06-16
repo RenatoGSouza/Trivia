@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { triviaPerguntas } from '../Services/api';
 import Header from '../components/Header';
+import { assertionsAction } from '../actions';
 
 class Game extends React.Component {
   constructor(props) {
@@ -75,16 +78,14 @@ class Game extends React.Component {
     buttonCorrect.forEach((button) => {
       button.style.border = '3px solid rgb(6, 240, 15)';
     });
+    clearInterval(this.intervalId);
   }
 
   render() {
-    const {
-      perguntas,
-      questao,
-      currentCount,
-      disableButton,
-      disableCorrectButton,
+    const { perguntas, questao, currentCount, disableButton, disableCorrectButton,
     } = this.state;
+
+    const { handleCorretAnswer } = this.props;
 
     if (perguntas.length !== 0) {
       return (
@@ -111,6 +112,9 @@ class Game extends React.Component {
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
               disabled={ disableCorrectButton }
+              onClick={ () => {
+                this.buttonEffect(); handleCorretAnswer();
+              } }
             >
               { perguntas[questao].correct_answer }
             </button>
@@ -126,4 +130,12 @@ class Game extends React.Component {
   }
 }
 
-export default Game;
+Game.propTypes = {
+  handleCorretAnswer: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  handleCorretAnswer: () => dispatch(assertionsAction()),
+});
+
+export default connect(null, mapDispatchToProps)(Game);
