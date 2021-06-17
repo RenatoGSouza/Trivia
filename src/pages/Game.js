@@ -70,36 +70,12 @@ class Game extends React.Component {
     });
   }
 
-  correctClick({ target }) {
-    target.style.border = 'green 2px solid';
-    const alternativas = document.querySelector('.wrong-answer');
-    alternativas.disabled = true;
-    document.querySelector('#btn-next').style.display = '';
-  }
-
-  incorrectClick({ target }) {
-    target.style.border = 'red 2px solid';
-    const alternativa = document.querySelector('.correct-answer');
-    alternativa.disabled = true;
-    document.querySelector('#btn-next').style.display = '';
-  }
-
   nextQuestion({ target }) {
     this.setState((oldState) => ({ questao: oldState.questao + 1 }));
     target.remove();
   }
 
   btnNextQuestion() {
-    // return (
-    //   <button
-    //     type="button"
-    //     data-testid="btn-next"
-    //     id="btn-next"
-    //     onClick={ this.nextQuestion }
-    //   >
-    //     Próxima
-    //   </button>
-    // );
     const btnNext = document.createElement('button');
     btnNext.setAttribute('data-testid', 'btn-next');
     btnNext.addEventListener('click', this.nextQuestion);
