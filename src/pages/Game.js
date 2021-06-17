@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
+import { assertionsAction, scoreAction } from '../actions';
 import Header from '../components/Header';
-import { scoreAction } from '../actions';
+
+const correctAanswer = '.correct-answer';
 
 class Game extends React.Component {
   constructor(props) {
@@ -11,6 +14,7 @@ class Game extends React.Component {
     this.timer = this.timer.bind(this);
     this.fiveSeconds = this.fiveSeconds.bind(this);
     this.timerCorrectAnswer = this.timerCorrectAnswer.bind(this);
+    this.nextPergunta = this.nextPergunta.bind(this);
 
     this.state = {
       perguntas: [],
@@ -19,21 +23,29 @@ class Game extends React.Component {
       disableButton: false,
       disableCorrectButton: false,
       questao: 0,
+      redirect: false,
     };
     this.api = this.api.bind(this);
-    this.nextQuestion = this.nextQuestion.bind(this);
     this.buttonEffect = this.buttonEffect.bind(this);
+    this.startTime = this.startTime.bind(this);
     this.adicionaPlacar = this.adicionaPlacar.bind(this);
   }
 
   componentDidMount() {
     this.api();
-    const MIL = 1000;
-    this.intervalId = setInterval(this.timer, MIL);
+    this.startTime();
+    localStorage.setItem('state', JSON.stringify({ player: { score: 0 } }));
+    const { score } = this.props;
+    score(0);
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
+  }
+
+  startTime() {
+    const MIL = 1000;
+    this.intervalId = setInterval(this.timer, MIL);
   }
 
   fiveSeconds() {
@@ -59,28 +71,41 @@ class Game extends React.Component {
       clearInterval(this.intervalId);
       this.setState({ disableButton: true, disableCorrectButton: true });
       this.fiveSeconds();
+      const buttonCorrect = document.querySelector(correctAanswer);
+      buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
+      const buttonNext = document.querySelector('.btn-next');
+      buttonNext.style.display = 'block';
     }
   }
 
   async api() {
     const perguntas = await triviaPerguntas();
+    console.log(perguntas);
     this.setState({
       perguntas: perguntas.results,
-      questao: 0,
     });
   }
 
-  nextQuestion({ target }) {
-    this.setState((oldState) => ({ questao: oldState.questao + 1 }));
-    target.remove();
-  }
-
-  btnNextQuestion() {
-    const btnNext = document.createElement('button');
-    btnNext.setAttribute('data-testid', 'btn-next');
-    btnNext.addEventListener('click', this.nextQuestion);
-    btnNext.innerHTML = 'Próxima';
-    return btnNext;
+  nextPergunta() {
+    const QUATRO = 4;
+    const { questao } = this.state;
+    if (questao < QUATRO) {
+      this.setState({
+        questao: questao + 1,
+        currentCount: 30,
+        disableButton: false,
+        disableCorrectButton: false,
+      });
+      this.startTime();
+    } else {
+      this.setState({
+        redirect: true,
+      });
+    }
+    const buttonCorrect = document.querySelector(correctAanswer);
+    buttonCorrect.style.border = 'none';
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'none';
   }
 
   adicionaPlacar(button) {
@@ -88,17 +113,29 @@ class Game extends React.Component {
     const um = 1;
     const dois = 2;
     const tres = 3;
+    const Player = localStorage.getItem('state');
+    const Score = JSON.parse(Player);
     const { currentCount, perguntas } = this.state;
     const { playerScore, score } = this.props;
+    this.setState({
+      disableButton: true,
+      disableCorrectButton: true,
+    });
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
+          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * um))));
         }
         if (pergunta.difficulty === 'medium') {
+          const newScore = (Score.player.score + (dez + (currentCount * dois)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * dois))));
         }
         if (pergunta.difficulty === 'hard') {
+          const newScore = (Score.player.score + (dez + (currentCount * tres)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * tres))));
         }
       });
@@ -106,32 +143,43 @@ class Game extends React.Component {
   }
 
   buttonEffect({ target }) {
+    const { handleCorretAnswer } = this.props;
+
     const buttonWrong = document.querySelectorAll('.wrong-answer');
-    const buttonCorrect = document.querySelectorAll('.correct-answer');
-    const next = document.querySelector('.next');
-    const btnNext = this.btnNextQuestion();
+    const buttonCorrect = document.querySelector(correctAanswer);
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'block';
     buttonWrong.forEach((button) => {
       button.style.border = '3px solid rgb(255, 0, 0)';
     });
-    buttonCorrect.forEach((button) => {
-      button.style.border = '3px solid rgb(6, 240, 15)';
-    });
-
-    next.appendChild(btnNext);
+    buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
     clearInterval(this.intervalId);
     this.adicionaPlacar(target);
+    if (target === buttonCorrect) {
+      return handleCorretAnswer();
+    }
+  }
+
+  buttonNext() {
+    return (
+      <button
+        type="button"
+        data-testid="btn-next"
+        className="btn-next"
+        onClick={ this.nextPergunta }
+      >
+        Próxima
+      </button>
+    );
   }
 
   render() {
-    const {
-      perguntas,
-      questao,
-      currentCount,
-      disableButton,
-      disableCorrectButton,
-    } = this.state;
+    const { perguntas, questao, currentCount, disableButton, disableCorrectButton,
+      redirect } = this.state;
 
-    if (perguntas.length !== 0) {
+    if (redirect) {
+      return <Redirect to="/feedback" />;
+    } if (perguntas.length !== 0) {
       return (
         <section className="sectionPerguntas">
           <Header />
@@ -155,16 +203,15 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
-              disabled={ disableCorrectButton }
               onClick={ this.buttonEffect }
+              disabled={ disableCorrectButton }
             >
               { perguntas[questao].correct_answer }
             </button>
-            <div className="next">aqui</div>
           </article>
+          {this.buttonNext()}
           <p>
-            Tempo restante:
-            {currentCount}
+            { `Tempo restante: ${currentCount}` }
           </p>
         </section>
       );
@@ -174,16 +221,18 @@ class Game extends React.Component {
 }
 
 Game.propTypes = {
+  handleCorretAnswer: PropTypes.func.isRequired,
   playerScore: PropTypes.number.isRequired,
   score: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  playerScore: state.playerReducer.playerScore,
+const mapDispatchToProps = (dispatch) => ({
+  handleCorretAnswer: () => dispatch(assertionsAction()),
+  score: (score) => dispatch(scoreAction(score)),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  score: (score) => dispatch(scoreAction(score)),
+const mapStateToProps = (state) => ({
+  playerScore: state.playerReducer.playerScore,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

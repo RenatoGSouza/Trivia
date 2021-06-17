@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 class Header extends Component {
   render() {
-    const { playerName, playerGravatar, playerScore } = this.props;
+    const { playerName, playerGravatar, playerScore, playerAssertions } = this.props;
     const hash = md5(playerGravatar).toString();
     return (
       <header>
@@ -31,6 +31,12 @@ class Header extends Component {
         <Link to="/Ranking">
           <button type="button" data-testid="btn-ranking">Ver Ranking</button>
         </Link>
+        {' '}
+        <span
+          className="header-assertions"
+        >
+          { `Número de acertos atual: ${playerAssertions}` }
+        </span>
       </header>
     );
   }
@@ -40,12 +46,14 @@ Header.propTypes = {
   playerGravatar: PropTypes.string.isRequired,
   playerName: PropTypes.string.isRequired,
   playerScore: PropTypes.number.isRequired,
+  playerAssertions: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   playerName: state.playerReducer.playerName,
   playerImg: state.playerReducer.playerGravatar,
   playerScore: state.playerReducer.playerScore,
+  playerAssertions: state.playerReducer.assertions,
 });
 
 export default connect(mapStateToProps)(Header);

@@ -57,7 +57,6 @@ class Login extends React.Component {
             type="text"
             data-testid="input-player-name"
             id="name"
-            onChange={ this.validateEmail }
           />
         </label>
         <label htmlFor="email">
