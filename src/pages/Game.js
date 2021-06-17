@@ -124,9 +124,9 @@ class Game extends React.Component {
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
-          (score(playerScore + (dez + (currentCount * um))));
           const newScore = (Score.player.score + (dez + (currentCount * um)));
           localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
+          (score(playerScore + (dez + (currentCount * um))));
         }
         if (pergunta.difficulty === 'medium') {
           const newScore = (Score.player.score + (dez + (currentCount * dois)));
