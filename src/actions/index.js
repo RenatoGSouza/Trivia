@@ -1,6 +1,7 @@
 export const PLAYER = 'PLAYER';
 export const GRAVATAR = 'GRAVATAR';
 export const SCORE = 'SCORE';
+export const ASSERTIONS = 'ASSERTIONS';
 
 export function playerAction(name) {
   return {
@@ -17,6 +18,13 @@ export function gravatarAction(email) {
     payload: {
       email,
     },
+  };
+}
+
+export function assertionsAction() {
+  return {
+    type: ASSERTIONS,
+    amount: 1,
   };
 }
 
