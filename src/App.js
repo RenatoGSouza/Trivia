@@ -13,8 +13,8 @@ export default function App() {
       <Route exact path="/" component={ Login } />
       <Route exact path="/configs" component={ Configs } />
       <Route path="/jogar" component={ Game } />
-      <Route path="/Ranking" component={ Ranking } />
       <Route path="/feedback" component={ Feedback } />
+      <Route path="/Ranking" component={ Ranking } />
     </Switch>
   );
 }
