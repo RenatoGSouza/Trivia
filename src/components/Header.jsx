@@ -37,6 +37,9 @@ class Header extends Component {
         >
           { `Número de acertos atual: ${playerAssertions}` }
         </span>
+        <Link to="/">
+          <button type="button" data-testid="btn-go-home">Home</button>
+        </Link>
       </header>
     );
   }

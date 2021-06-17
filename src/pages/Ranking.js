@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../components/Header';
 
 class Ranking extends React.Component {
   constructor(props) {
@@ -8,7 +9,10 @@ class Ranking extends React.Component {
 
   render() {
     return (
-      <section data-testid="ranking-title">Ranking</section>
+      <div>
+        <Header />
+        <section data-testid="ranking-title">Ranking</section>
+      </div>
     );
   }
 }
