@@ -35,6 +35,8 @@ class Game extends React.Component {
     this.api();
     this.startTime();
     localStorage.setItem('state', JSON.stringify({ player: { score: 0 } }));
+    const { score } = this.props;
+    score(0);
   }
 
   componentWillUnmount() {
@@ -102,6 +104,8 @@ class Game extends React.Component {
     }
     const buttonCorrect = document.querySelector(correctAanswer);
     buttonCorrect.style.border = 'none';
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'none';
   }
 
   adicionaPlacar(button) {
@@ -113,6 +117,10 @@ class Game extends React.Component {
     const Score = JSON.parse(Player);
     const { currentCount, perguntas } = this.state;
     const { playerScore, score } = this.props;
+    this.setState({
+      disableButton: true,
+      disableCorrectButton: true,
+    });
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
@@ -121,12 +129,12 @@ class Game extends React.Component {
           localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
         }
         if (pergunta.difficulty === 'medium') {
-          const { score: newScore } = (Score.player.score + (dez + (currentCount * um)));
+          const newScore = (Score.player.score + (dez + (currentCount * dois)));
           localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * dois))));
         }
         if (pergunta.difficulty === 'hard') {
-          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          const newScore = (Score.player.score + (dez + (currentCount * tres)));
           localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * tres))));
         }
