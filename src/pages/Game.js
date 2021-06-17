@@ -104,6 +104,8 @@ class Game extends React.Component {
     }
     const buttonCorrect = document.querySelector(correctAanswer);
     buttonCorrect.style.border = 'none';
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'none';
   }
 
   adicionaPlacar(button) {
