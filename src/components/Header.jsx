@@ -22,11 +22,14 @@ class Header extends Component {
         >
           { playerName }
         </span>
-        <span
-          data-testid="header-score"
-          className="header-score"
-        >
-          { `Pontuação atual: ${playerScore}` }
+        <span>
+          Sua pontuação é:
+          <span
+            data-testid="header-score"
+            className="header-score"
+          >
+            {playerScore}
+          </span>
         </span>
         <Link to="/Ranking">
           <button type="button" data-testid="btn-ranking">Ver Ranking</button>
