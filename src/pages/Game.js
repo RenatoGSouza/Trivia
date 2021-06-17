@@ -71,6 +71,8 @@ class Game extends React.Component {
       this.fiveSeconds();
       const buttonCorrect = document.querySelector(correctAanswer);
       buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
+      const buttonNext = document.querySelector('.btn-next');
+      buttonNext.style.display = 'block';
     }
   }
 
@@ -135,12 +137,27 @@ class Game extends React.Component {
   buttonEffect({ target }) {
     const buttonWrong = document.querySelectorAll('.wrong-answer');
     const buttonCorrect = document.querySelector(correctAanswer);
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'block';
     buttonWrong.forEach((button) => {
       button.style.border = '3px solid rgb(255, 0, 0)';
     });
     buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
     clearInterval(this.intervalId);
     this.adicionaPlacar(target);
+  }
+
+  buttonNext() {
+    return (
+      <button
+        type="button"
+        data-testid="btn-next"
+        className="btn-next"
+        onClick={ this.nextPergunta }
+      >
+        Próxima
+      </button>
+    );
   }
 
   render() {
@@ -178,12 +195,9 @@ class Game extends React.Component {
               { perguntas[questao].correct_answer }
             </button>
           </article>
-          <button type="button" data-testid="btn-next" onClick={ this.nextPergunta }>
-            Próxima
-          </button>
+          {this.buttonNext()}
           <p>
-            Tempo restante:
-            {currentCount}
+            { `Tempo restante: ${currentCount}` }
           </p>
         </section>
       );
