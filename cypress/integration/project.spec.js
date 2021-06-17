@@ -332,6 +332,7 @@ describe.only('11 - [TELA DE JOGO] Desenvolva o jogo de forma que a pessoa que j
       const after = JSON.parse(localStorage.getItem(LOCAL_STORAGE_STATE_KEY));
       expect(before.player.score).to.be.eq(after.player.score);
     });
+    console.log(before);
   });
 
   it('Redireciona para a tela de _feedback_ após a quinta pergunta', () => {

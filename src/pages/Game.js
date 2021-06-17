@@ -34,6 +34,7 @@ class Game extends React.Component {
   componentDidMount() {
     this.api();
     this.startTime();
+    localStorage.setItem('state', JSON.stringify({ player: { score: 0 } }));
   }
 
   componentWillUnmount() {
@@ -75,6 +76,7 @@ class Game extends React.Component {
 
   async api() {
     const perguntas = await triviaPerguntas();
+    console.log(perguntas);
     this.setState({
       perguntas: perguntas.results,
     });
@@ -95,9 +97,9 @@ class Game extends React.Component {
       this.setState({
         redirect: true,
       });
-      const buttonCorrect = document.querySelector(correctAanswer);
-      buttonCorrect.style.border = 'none';
     }
+    const buttonCorrect = document.querySelector(correctAanswer);
+    buttonCorrect.style.border = 'none';
   }
 
   adicionaPlacar(button) {
@@ -105,17 +107,25 @@ class Game extends React.Component {
     const um = 1;
     const dois = 2;
     const tres = 3;
+    const Player = localStorage.getItem('state');
+    const Score = JSON.parse(Player);
     const { currentCount, perguntas } = this.state;
     const { playerScore, score } = this.props;
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
           (score(playerScore + (dez + (currentCount * um))));
+          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
         }
         if (pergunta.difficulty === 'medium') {
+          const { score: newScore } = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * dois))));
         }
         if (pergunta.difficulty === 'hard') {
+          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * tres))));
         }
       });
