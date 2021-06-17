@@ -1,6 +1,9 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
 import Header from '../components/Header';
+
+const correctAanswer = '.correct-answer';
 
 class Game extends React.Component {
   constructor(props) {
@@ -8,6 +11,7 @@ class Game extends React.Component {
     this.timer = this.timer.bind(this);
     this.fiveSeconds = this.fiveSeconds.bind(this);
     this.timerCorrectAnswer = this.timerCorrectAnswer.bind(this);
+    this.nextPergunta = this.nextPergunta.bind(this);
 
     this.state = {
       perguntas: [],
@@ -16,19 +20,25 @@ class Game extends React.Component {
       disableButton: false,
       disableCorrectButton: false,
       questao: 0,
+      redirect: false,
     };
     this.api = this.api.bind(this);
     this.buttonEffect = this.buttonEffect.bind(this);
+    this.startTime = this.startTime.bind(this);
   }
 
   componentDidMount() {
     this.api();
-    const MIL = 1000;
-    this.intervalId = setInterval(this.timer, MIL);
+    this.startTime();
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
+  }
+
+  startTime() {
+    const MIL = 1000;
+    this.intervalId = setInterval(this.timer, MIL);
   }
 
   fiveSeconds() {
@@ -54,40 +64,54 @@ class Game extends React.Component {
       clearInterval(this.intervalId);
       this.setState({ disableButton: true, disableCorrectButton: true });
       this.fiveSeconds();
+      const buttonCorrect = document.querySelector(correctAanswer);
+      buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
     }
   }
 
   async api() {
     const perguntas = await triviaPerguntas();
-    console.log(perguntas.results);
     this.setState({
       perguntas: perguntas.results,
-      questao: 0,
     });
   }
 
+  nextPergunta() {
+    const QUATRO = 4;
+    const { questao } = this.state;
+    if (questao < QUATRO) {
+      this.setState({
+        questao: questao + 1,
+        currentCount: 30,
+        disableButton: false,
+        disableCorrectButton: false,
+      });
+      this.startTime();
+    } else {
+      this.setState({
+        redirect: true,
+      });
+      const buttonCorrect = document.querySelector(correctAanswer);
+      buttonCorrect.style.border = 'none';
+    }
+  }
+
   buttonEffect() {
+    const buttonCorrect = document.querySelector(correctAanswer);
     const buttonWrong = document.querySelectorAll('.wrong-answer');
-    const buttonCorrect = document.querySelectorAll('.correct-answer');
     buttonWrong.forEach((button) => {
       button.style.border = '3px solid rgb(255, 0, 0)';
     });
-    buttonCorrect.forEach((button) => {
-      button.style.border = '3px solid rgb(6, 240, 15)';
-    });
+    buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
     clearInterval(this.intervalId);
   }
 
   render() {
-    const {
-      perguntas,
-      questao,
-      currentCount,
-      disableButton,
-      disableCorrectButton,
-    } = this.state;
-
-    if (perguntas.length !== 0) {
+    const { perguntas, questao, currentCount, disableButton, disableCorrectButton,
+      redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/feedback" />;
+    } if (perguntas.length !== 0) {
       return (
         <section className="sectionPerguntas">
           <Header />
@@ -117,6 +141,9 @@ class Game extends React.Component {
               { perguntas[questao].correct_answer }
             </button>
           </article>
+          <button type="button" data-testid="btn-next" onClick={ this.nextPergunta }>
+            Próxima
+          </button>
           <p>
             Tempo restante:
             {currentCount}
