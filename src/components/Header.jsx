@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
@@ -27,6 +28,9 @@ class Header extends Component {
         >
           { `Pontuação atual: ${playerScore}` }
         </span>
+        <Link to="/Ranking">
+          <button type="button" data-testid="btn-ranking">Ver Ranking</button>
+        </Link>
         {' '}
         <span
           className="header-assertions"

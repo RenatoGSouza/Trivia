@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
-import Header from '../components/Header';
 import { assertionsAction, scoreAction } from '../actions';
+import Header from '../components/Header';
 
 const correctAanswer = '.correct-answer';
 
