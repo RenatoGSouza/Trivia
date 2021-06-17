@@ -15,7 +15,7 @@ class Feedbacks extends React.Component {
         <h1 data-testid="feedback-text">
           {assertionsCorrect >= THREE ? 'Mandou bem!' : 'Podia ser melhor...'}
         </h1>
-        <Link to="/">Jogar novamente</Link>
+        <Link to="/" data-testid="btn-play-again">Jogar novamente</Link>
       </>
     );
   }
