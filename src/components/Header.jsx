@@ -25,7 +25,7 @@ class Header extends Component {
           data-testid="header-score"
           className="header-score"
         >
-          { playerScore }
+          { `Pontuação atual: ${playerScore}` }
         </span>
       </header>
     );
@@ -41,6 +41,7 @@ Header.propTypes = {
 const mapStateToProps = (state) => ({
   playerName: state.playerReducer.playerName,
   playerImg: state.playerReducer.playerGravatar,
+  playerScore: state.playerReducer.playerScore,
 });
 
 export default connect(mapStateToProps)(Header);
