@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { triviaPerguntas } from '../Services/api';
 import Header from '../components/Header';
 import { scoreAction } from '../actions';
+
+const correctAanswer = '.correct-answer';
 
 class Game extends React.Component {
   constructor(props) {
@@ -11,6 +14,7 @@ class Game extends React.Component {
     this.timer = this.timer.bind(this);
     this.fiveSeconds = this.fiveSeconds.bind(this);
     this.timerCorrectAnswer = this.timerCorrectAnswer.bind(this);
+    this.nextPergunta = this.nextPergunta.bind(this);
 
     this.state = {
       perguntas: [],
@@ -19,20 +23,27 @@ class Game extends React.Component {
       disableButton: false,
       disableCorrectButton: false,
       questao: 0,
+      redirect: false,
     };
     this.api = this.api.bind(this);
     this.buttonEffect = this.buttonEffect.bind(this);
+    this.startTime = this.startTime.bind(this);
     this.adicionaPlacar = this.adicionaPlacar.bind(this);
   }
 
   componentDidMount() {
     this.api();
-    const MIL = 1000;
-    this.intervalId = setInterval(this.timer, MIL);
+    this.startTime();
+    localStorage.setItem('state', JSON.stringify({ player: { score: 0 } }));
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
+  }
+
+  startTime() {
+    const MIL = 1000;
+    this.intervalId = setInterval(this.timer, MIL);
   }
 
   fiveSeconds() {
@@ -58,16 +69,39 @@ class Game extends React.Component {
       clearInterval(this.intervalId);
       this.setState({ disableButton: true, disableCorrectButton: true });
       this.fiveSeconds();
+      const buttonCorrect = document.querySelector(correctAanswer);
+      buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
+      const buttonNext = document.querySelector('.btn-next');
+      buttonNext.style.display = 'block';
     }
   }
 
   async api() {
     const perguntas = await triviaPerguntas();
-    console.log(perguntas.results);
+    console.log(perguntas);
     this.setState({
       perguntas: perguntas.results,
-      questao: 0,
     });
+  }
+
+  nextPergunta() {
+    const QUATRO = 4;
+    const { questao } = this.state;
+    if (questao < QUATRO) {
+      this.setState({
+        questao: questao + 1,
+        currentCount: 30,
+        disableButton: false,
+        disableCorrectButton: false,
+      });
+      this.startTime();
+    } else {
+      this.setState({
+        redirect: true,
+      });
+    }
+    const buttonCorrect = document.querySelector(correctAanswer);
+    buttonCorrect.style.border = 'none';
   }
 
   adicionaPlacar(button) {
@@ -75,17 +109,25 @@ class Game extends React.Component {
     const um = 1;
     const dois = 2;
     const tres = 3;
+    const Player = localStorage.getItem('state');
+    const Score = JSON.parse(Player);
     const { currentCount, perguntas } = this.state;
     const { playerScore, score } = this.props;
     if (button.className === 'correct-answer') {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
           (score(playerScore + (dez + (currentCount * um))));
+          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
         }
         if (pergunta.difficulty === 'medium') {
+          const { score: newScore } = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * dois))));
         }
         if (pergunta.difficulty === 'hard') {
+          const newScore = (Score.player.score + (dez + (currentCount * um)));
+          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
           (score(playerScore + (dez + (currentCount * tres))));
         }
       });
@@ -94,27 +136,36 @@ class Game extends React.Component {
 
   buttonEffect({ target }) {
     const buttonWrong = document.querySelectorAll('.wrong-answer');
-    const buttonCorrect = document.querySelectorAll('.correct-answer');
+    const buttonCorrect = document.querySelector(correctAanswer);
+    const buttonNext = document.querySelector('.btn-next');
+    buttonNext.style.display = 'block';
     buttonWrong.forEach((button) => {
       button.style.border = '3px solid rgb(255, 0, 0)';
     });
-    buttonCorrect.forEach((button) => {
-      button.style.border = '3px solid rgb(6, 240, 15)';
-    });
+    buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
     clearInterval(this.intervalId);
     this.adicionaPlacar(target);
   }
 
-  render() {
-    const {
-      perguntas,
-      questao,
-      currentCount,
-      disableButton,
-      disableCorrectButton,
-    } = this.state;
+  buttonNext() {
+    return (
+      <button
+        type="button"
+        data-testid="btn-next"
+        className="btn-next"
+        onClick={ this.nextPergunta }
+      >
+        Próxima
+      </button>
+    );
+  }
 
-    if (perguntas.length !== 0) {
+  render() {
+    const { perguntas, questao, currentCount, disableButton, disableCorrectButton,
+      redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/feedback" />;
+    } if (perguntas.length !== 0) {
       return (
         <section className="sectionPerguntas">
           <Header />
@@ -138,15 +189,15 @@ class Game extends React.Component {
               className="correct-answer"
               data-testid="correct-answer"
               key={ perguntas[questao].correct }
-              disabled={ disableCorrectButton }
               onClick={ this.buttonEffect }
+              disabled={ disableCorrectButton }
             >
               { perguntas[questao].correct_answer }
             </button>
           </article>
+          {this.buttonNext()}
           <p>
-            Tempo restante:
-            {currentCount}
+            { `Tempo restante: ${currentCount}` }
           </p>
         </section>
       );
