@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 class Feedback extends React.Component {
   constructor(props) {
@@ -8,7 +10,13 @@ class Feedback extends React.Component {
 
   render() {
     return (
-      <div data-testid="feedback-text">Olá pages FEEDBACK</div>
+      <div>
+        <Header />
+        <div data-testid="feedback-text">
+          <span>Olá pages FEEDBACK</span>
+          <Link to="/">Voltar</Link>
+        </div>
+      </div>
     );
   }
 }
