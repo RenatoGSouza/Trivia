@@ -8,8 +8,10 @@ class Game extends React.Component {
     this.state = {
       perguntas: [],
       questao: 0,
+      hidden: 'hidden',
     };
     this.api = this.api.bind(this);
+    this.nextQuestion = this.nextQuestion.bind(this);
   }
 
   componentDidMount() {
@@ -18,7 +20,6 @@ class Game extends React.Component {
 
   async api() {
     const perguntas = await triviaPerguntas();
-    console.log(perguntas.results);
     this.setState({
       perguntas: perguntas.results,
       questao: 0,
@@ -29,12 +30,32 @@ class Game extends React.Component {
     target.style.border = 'green 2px solid';
     const alternativas = document.querySelector('.wrong-answer');
     alternativas.disabled = true;
+    document.querySelector('#btn-next').style.display = '';
   }
 
   incorrectClick({ target }) {
     target.style.border = 'red 2px solid';
     const alternativa = document.querySelector('.correct-answer');
     alternativa.disabled = true;
+    document.querySelector('#btn-next').style.display = '';
+  }
+
+  nextQuestion() {
+    this.setState((oldState) => ({ questao: oldState.questao + 1 }));
+    document.querySelector('#btn-next').style.display = 'none';
+  }
+
+  btnNextQuestion() {
+    return (
+      <button
+        type="button"
+        data-testid="btn-next"
+        id="btn-next"
+        onClick={ this.nextQuestion }
+      >
+        Próxima
+      </button>
+    );
   }
 
   render() {
@@ -43,12 +64,6 @@ class Game extends React.Component {
       return (
         <section className="sectionPerguntas">
           <Header />
-          {/* {console.log(perguntas[questao])}
-          {perguntas.map(({ category,
-          question,
-          incorrect_answers: incorrect,
-          correct_answer: correct,
-        }) => ( */}
           <article>
             <p data-testid="question-category">{ perguntas[questao].category }</p>
             <p data-testid="question-text">{ perguntas[questao].question }</p>
@@ -72,8 +87,6 @@ class Game extends React.Component {
               { perguntas[questao].correct_answer }
 
             </button>
-            {/* <hr />
-        ))} */}
           </article>
         </section>
 
