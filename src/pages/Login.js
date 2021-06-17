@@ -1,5 +1,8 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { playerAction, gravatarAction } from '../actions';
 import { triviaAPI } from '../Services/api';
 
 class Login extends React.Component {
@@ -23,6 +26,10 @@ class Login extends React.Component {
   validateEmail(email) {
     const nameInput = document.querySelector('#name').value;
     const re = /\S+@\S+\.\S+/;
+    const { playerName, playerImg } = this.props;
+    playerName(nameInput);
+    playerImg(email);
+
     if ((re.test(email)) && (nameInput.length > 0)) {
       this.setState({
         validForm: false,
@@ -84,4 +91,14 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  playerImg: PropTypes.func.isRequired,
+  playerName: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  playerName: (name) => dispatch(playerAction(name)),
+  playerImg: (email) => dispatch(gravatarAction(email)),
+});
+
+export default connect(null, mapDispatchToProps)(Login);

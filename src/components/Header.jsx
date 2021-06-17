@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
+import PropTypes from 'prop-types';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playerGravatar: '',
-      playerName: '',
-      playerScore: 0,
-    };
-  }
-
   render() {
-    const { playerGravatar, playerName, playerScore } = this.state;
+    const { playerName, playerGravatar, playerScore } = this.props;
+    const hash = md5(playerGravatar).toString();
     return (
       <header>
         <img
-          src={ playerGravatar }
+          src={ `https://www.gravatar.com/avatar/${hash}` }
           alt="Avatar do jogador"
           data-testid="header-profile-picture"
           className="header-profile-picture"
@@ -31,11 +25,23 @@ class Header extends Component {
           data-testid="header-score"
           className="header-score"
         >
-          { playerScore }
+          { `Pontuação atual: ${playerScore}` }
         </span>
       </header>
     );
   }
 }
 
-export default Header;
+Header.propTypes = {
+  playerGravatar: PropTypes.string.isRequired,
+  playerName: PropTypes.string.isRequired,
+  playerScore: PropTypes.number.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  playerName: state.playerReducer.playerName,
+  playerImg: state.playerReducer.playerGravatar,
+  playerScore: state.playerReducer.playerScore,
+});
+
+export default connect(mapStateToProps)(Header);
