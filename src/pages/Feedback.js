@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
 
 class Feedbacks extends React.Component {
   render() {
@@ -8,9 +9,12 @@ class Feedbacks extends React.Component {
     const THREE = 3;
 
     return (
-      <h1 data-testid="feedback-text">
-        {assertionsCorrect >= THREE ? 'Mandou bem!' : 'Podia ser melhor...'}
-      </h1>
+      <>
+        <Header />
+        <h1 data-testid="feedback-text">
+          {assertionsCorrect >= THREE ? 'Mandou bem!' : 'Podia ser melhor...'}
+        </h1>
+      </>
     );
   }
 }
