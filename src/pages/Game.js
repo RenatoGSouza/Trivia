@@ -15,6 +15,7 @@ class Game extends React.Component {
     this.fiveSeconds = this.fiveSeconds.bind(this);
     this.timerCorrectAnswer = this.timerCorrectAnswer.bind(this);
     this.nextPergunta = this.nextPergunta.bind(this);
+    this.updatePlayer = this.updatePlayer.bind(this);
 
     this.state = {
       perguntas: [],
@@ -126,24 +127,26 @@ class Game extends React.Component {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
           const newScore = (Score.player.score + (dez + (currentCount * um)));
-          localStorage.setItem('state', JSON
-            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
-          (score(playerScore + (dez + (currentCount * um))));
+          this.updatePlayer(newScore, assertions);
+          score(playerScore + (dez + (currentCount * um)));
         }
         if (pergunta.difficulty === 'medium') {
           const newScore = (Score.player.score + (dez + (currentCount * dois)));
-          localStorage.setItem('state', JSON
-            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
-          (score(playerScore + (dez + (currentCount * dois))));
+          this.updatePlayer(newScore, assertions);
+          score(playerScore + (dez + (currentCount * dois)));
         }
         if (pergunta.difficulty === 'hard') {
           const newScore = (Score.player.score + (dez + (currentCount * tres)));
-          localStorage.setItem('state', JSON
-            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
-          (score(playerScore + (dez + (currentCount * tres))));
+          this.updatePlayer(newScore, assertions);
+          score(playerScore + (dez + (currentCount * tres)));
         }
       });
     }
+  }
+
+  updatePlayer(newScore, assertions) {
+    localStorage.setItem('state', JSON
+      .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
   }
 
   buttonEffect({ target }) {
