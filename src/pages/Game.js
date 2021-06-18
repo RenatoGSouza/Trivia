@@ -34,7 +34,8 @@ class Game extends React.Component {
   componentDidMount() {
     this.api();
     this.startTime();
-    localStorage.setItem('state', JSON.stringify({ player: { score: 0 } }));
+    localStorage.setItem('state', JSON
+      .stringify({ player: { score: 0, assertions: 0 } }));
     const { score } = this.props;
     score(0);
   }
@@ -116,7 +117,7 @@ class Game extends React.Component {
     const Player = localStorage.getItem('state');
     const Score = JSON.parse(Player);
     const { currentCount, perguntas } = this.state;
-    const { playerScore, score } = this.props;
+    const { playerScore, score, assertions } = this.props;
     this.setState({
       disableButton: true,
       disableCorrectButton: true,
@@ -125,17 +126,20 @@ class Game extends React.Component {
       perguntas.forEach((pergunta) => {
         if (pergunta.difficulty === 'easy') {
           const newScore = (Score.player.score + (dez + (currentCount * um)));
-          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
+          localStorage.setItem('state', JSON
+            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
           (score(playerScore + (dez + (currentCount * um))));
         }
         if (pergunta.difficulty === 'medium') {
           const newScore = (Score.player.score + (dez + (currentCount * dois)));
-          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
+          localStorage.setItem('state', JSON
+            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
           (score(playerScore + (dez + (currentCount * dois))));
         }
         if (pergunta.difficulty === 'hard') {
           const newScore = (Score.player.score + (dez + (currentCount * tres)));
-          localStorage.setItem('state', JSON.stringify({ player: { score: newScore } }));
+          localStorage.setItem('state', JSON
+            .stringify({ player: { score: newScore, assertions: assertions + 1 } }));
           (score(playerScore + (dez + (currentCount * tres))));
         }
       });
@@ -224,6 +228,7 @@ Game.propTypes = {
   handleCorretAnswer: PropTypes.func.isRequired,
   playerScore: PropTypes.number.isRequired,
   score: PropTypes.func.isRequired,
+  assertions: PropTypes.number.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -233,6 +238,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   playerScore: state.playerReducer.playerScore,
+  assertions: state.playerReducer.assertions,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
