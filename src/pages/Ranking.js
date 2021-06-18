@@ -11,7 +11,9 @@ class Ranking extends React.Component {
     return (
       <div>
         <Header />
-        <section data-testid="ranking-title">Ranking</section>
+        <section data-testid="ranking-title">
+          <p data-testid="feedback-total-score">Score</p>
+        </section>
       </div>
     );
   }
