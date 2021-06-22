@@ -6,7 +6,7 @@ export async function triviaAPI() {
 
 export async function triviaPerguntas() {
   const { token } = await triviaAPI();
-  const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+  const response = await fetch(`https://opentdb.com/api.php?amount=10&category=15&token=${token}`);
   const perguntas = await response.json();
   return perguntas;
 }
