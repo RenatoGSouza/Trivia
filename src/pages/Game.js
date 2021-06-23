@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
 import { assertionsAction, scoreAction } from '../actions';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 
 const correctAanswer = '.correct-answer';
 
@@ -223,7 +224,7 @@ class Game extends React.Component {
         </section>
       );
     }
-    return null;
+    return <Loading />;
   }
 }
 
