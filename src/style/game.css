@@ -16,4 +16,13 @@
 .alternativas {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  width: 70%;
+}
+
+.box-question {
+  background-color: black;
+  margin: 100px auto;
+  width: 60%;
 }
