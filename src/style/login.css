@@ -1,8 +1,17 @@
 body {
-
-  /* background-color: grey; */
   margin: 0;
   padding: 0;
+}
+
+.div-login-img {
+  background-color: black;
+  background-image: url('../images/images.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
 }
 
 .div-login {
@@ -39,9 +48,18 @@ body {
 }
 
 .h1-login {
+  animation: trivia 1.5s ease-in-out infinite;
+  font-family: Orbitron , sans-serif;
   font-size: 50px;
   font-weight: 700;
   text-align: center;
+}
+
+@keyframes trivia {
+
+  50% {
+    opacity: 30%;
+  }
 }
 
 .button-login {

@@ -54,7 +54,7 @@ class Login extends React.Component {
     }
 
     return (
-      <div className="div-login">
+      <div className="div-login-img">
         <form className="form-login">
           <InputsLogin validateEmail={ this.validateEmail } />
           <ButtonsLogin
