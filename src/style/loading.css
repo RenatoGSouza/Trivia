@@ -20,6 +20,7 @@
 
 .loading {
   animation: blink 0.9s ease-in-out infinite;
+  font-family: 'Orbitron' , sans-serif;
   font-size: 10px;
 }
 
