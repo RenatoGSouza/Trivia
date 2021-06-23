@@ -1,3 +1,5 @@
+import { ASSERTIONS, GRAVATAR, PLAYER, SCORE } from '../actions';
+
 const PLAYER_INITIAL_STATE = {
   playerGravatar: '',
   playerName: '',
@@ -7,22 +9,22 @@ const PLAYER_INITIAL_STATE = {
 
 function playerReducer(state = PLAYER_INITIAL_STATE, action) {
   switch (action.type) {
-  case 'PLAYER':
+  case PLAYER:
     return {
       ...state,
       playerName: action.payload.name,
     };
-  case 'GRAVATAR':
+  case GRAVATAR:
     return {
       ...state,
       playerGravatar: action.payload.email,
     };
-  case 'SCORE':
+  case SCORE:
     return {
       ...state,
       playerScore: action.payload.score,
     };
-  case 'ASSERTIONS':
+  case ASSERTIONS:
     return {
       ...state,
       assertions: state.assertions + action.amount,

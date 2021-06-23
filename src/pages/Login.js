@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { playerAction, gravatarAction } from '../actions';
 import { triviaAPI } from '../Services/api';
+import '../style/login.css';
+import InputsLogin from '../components/Login/InputsLogin';
+import ButtonsLogin from '../components/Login/ButtonsLogin';
+import ImgLogin from '../components/Login/ImgLogin';
 
 class Login extends React.Component {
   constructor(props) {
@@ -50,42 +54,17 @@ class Login extends React.Component {
     }
 
     return (
-      <form>
-        <label htmlFor="name">
-          NAME
-          <input
-            type="text"
-            data-testid="input-player-name"
-            id="name"
+      <div className="div-login-img">
+        <form className="form-login">
+          <InputsLogin validateEmail={ this.validateEmail } />
+          <ButtonsLogin
+            clickBtnJogar={ this.clickBtnJogar }
+            validForm={ validForm }
+            redirect={ this.redirect }
           />
-        </label>
-        <label htmlFor="email">
-          EMAIL
-          <input
-            type="text"
-            data-testid="input-gravatar-email"
-            id="email"
-            onChange={ ({ target: { value } }) => this.validateEmail(value) }
-          />
-        </label>
-        <button
-          type="button"
-          data-testid="btn-settings"
-          onClick={ () => this.redirect() }
-        >
-          Configurações
-        </button>
-        <Link to="/jogar">
-          <button
-            type="submit"
-            data-testid="btn-play"
-            disabled={ validForm }
-            onClick={ this.clickBtnJogar }
-          >
-            Jogar
-          </button>
-        </Link>
-      </form>
+          <ImgLogin />
+        </form>
+      </div>
     );
   }
 }

@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.div-login-img {
+  background-color: black;
+  background-image: url('../images/images.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.div-login {
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+}
+
+.div-login-input {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px 10px;
+}
+
+.form-login {
+  background-color: black;
+  color: white;
+  height: 400px;
+  margin: 20px;
+  width: 500px;
+}
+
+.input-login {
+  margin: 20px;
+  width: 80%;
+}
+
+.img-login {
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.h1-login {
+  animation: trivia 1.5s ease-in-out infinite;
+  font-family: Orbitron , sans-serif;
+  font-size: 50px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@keyframes trivia {
+
+  50% {
+    opacity: 30%;
+  }
+}
+
+.button-login {
+  background-color: lightgray;
+  border-radius: 7px;
+  box-shadow: 0 0.2em gray;
+  color: gray;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+  text-shadow: -1px -1px black , 1px 1px white;
+
+}
+
+.button-login:active {
+  box-shadow: none;
+  position: relative;
+  top: 0.2em;
+}

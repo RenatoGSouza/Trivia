@@ -5,8 +5,12 @@ import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
 import { assertionsAction, scoreAction } from '../actions';
 import Header from '../components/Header';
+import Loading from '../components/Loading/Loading';
+import '../style/game.css';
+import Alternatives from '../components/Game/Alternatives';
+import Questions from '../components/Game/Questions';
 
-const correctAanswer = '.correct-answer';
+const correctAnswer = '.correct-answer';
 
 class Game extends React.Component {
   constructor(props) {
@@ -73,7 +77,7 @@ class Game extends React.Component {
       clearInterval(this.intervalId);
       this.setState({ disableButton: true, disableCorrectButton: true });
       this.fiveSeconds();
-      const buttonCorrect = document.querySelector(correctAanswer);
+      const buttonCorrect = document.querySelector(correctAnswer);
       buttonCorrect.style.border = '3px solid rgb(6, 240, 15)';
       const buttonNext = document.querySelector('.btn-next');
       buttonNext.style.display = 'block';
@@ -82,7 +86,6 @@ class Game extends React.Component {
 
   async api() {
     const perguntas = await triviaPerguntas();
-    console.log(perguntas);
     this.setState({
       perguntas: perguntas.results,
     });
@@ -104,7 +107,7 @@ class Game extends React.Component {
         redirect: true,
       });
     }
-    const buttonCorrect = document.querySelector(correctAanswer);
+    const buttonCorrect = document.querySelector(correctAnswer);
     buttonCorrect.style.border = 'none';
     const buttonNext = document.querySelector('.btn-next');
     buttonNext.style.display = 'none';
@@ -153,7 +156,7 @@ class Game extends React.Component {
     const { handleCorretAnswer } = this.props;
 
     const buttonWrong = document.querySelectorAll('.wrong-answer');
-    const buttonCorrect = document.querySelector(correctAanswer);
+    const buttonCorrect = document.querySelector(correctAnswer);
     const buttonNext = document.querySelector('.btn-next');
     buttonNext.style.display = 'block';
     buttonWrong.forEach((button) => {
@@ -190,40 +193,24 @@ class Game extends React.Component {
       return (
         <section className="sectionPerguntas">
           <Header />
-          <article>
-            <p data-testid="question-category">{ perguntas[questao].category }</p>
-            <p data-testid="question-text">{ perguntas[questao].question }</p>
-            {perguntas[questao].incorrect_answers.map((alternativas, index) => (
-              <button
-                type="button"
-                className="wrong-answer"
-                data-testid={ `wrong-answer-${index}` }
-                key={ alternativas }
-                disabled={ disableButton }
-                onClick={ this.buttonEffect }
-              >
-                { alternativas }
-              </button>
-            ))}
-            <button
-              type="button"
-              className="correct-answer"
-              data-testid="correct-answer"
-              key={ perguntas[questao].correct }
-              onClick={ this.buttonEffect }
-              disabled={ disableCorrectButton }
-            >
-              { perguntas[questao].correct_answer }
-            </button>
+          <article className="box-question">
+            <Questions questao={ questao } perguntas={ perguntas } />
+            <Alternatives
+              disableButton={ disableButton }
+              disableCorrectButton={ disableCorrectButton }
+              state={ this.state }
+              buttonEffect={ this.buttonEffect }
+            />
+            <p className="question">
+              { `Tempo restante: ${currentCount}` }
+            </p>
+
+            {this.buttonNext()}
           </article>
-          {this.buttonNext()}
-          <p>
-            { `Tempo restante: ${currentCount}` }
-          </p>
         </section>
       );
     }
-    return null;
+    return <Loading />;
   }
 }
 
