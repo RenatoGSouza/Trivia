@@ -5,7 +5,10 @@ import { Redirect } from 'react-router-dom';
 import { triviaPerguntas } from '../Services/api';
 import { assertionsAction, scoreAction } from '../actions';
 import Header from '../components/Header';
-import Loading from '../components/Loading';
+import Loading from '../components/Loading/Loading';
+import '../style/game.css';
+import Alternatives from '../components/Game/Alternatives';
+import Questions from '../components/Game/Questions';
 
 const correctAanswer = '.correct-answer';
 
@@ -83,7 +86,6 @@ class Game extends React.Component {
 
   async api() {
     const perguntas = await triviaPerguntas();
-    console.log(perguntas);
     this.setState({
       perguntas: perguntas.results,
     });
@@ -192,33 +194,16 @@ class Game extends React.Component {
         <section className="sectionPerguntas">
           <Header />
           <article>
-            <p data-testid="question-category">{ perguntas[questao].category }</p>
-            <p data-testid="question-text">{ perguntas[questao].question }</p>
-            {perguntas[questao].incorrect_answers.map((alternativas, index) => (
-              <button
-                type="button"
-                className="wrong-answer"
-                data-testid={ `wrong-answer-${index}` }
-                key={ alternativas }
-                disabled={ disableButton }
-                onClick={ this.buttonEffect }
-              >
-                { alternativas }
-              </button>
-            ))}
-            <button
-              type="button"
-              className="correct-answer"
-              data-testid="correct-answer"
-              key={ perguntas[questao].correct }
-              onClick={ this.buttonEffect }
-              disabled={ disableCorrectButton }
-            >
-              { perguntas[questao].correct_answer }
-            </button>
+            <Questions questao={ questao } perguntas={ perguntas } />
+            <Alternatives
+              disableButton={ disableButton }
+              disableCorrectButton={ disableCorrectButton }
+              state={ this.state }
+              buttonEffect={ this.buttonEffect }
+            />
           </article>
           {this.buttonNext()}
-          <p>
+          <p className="question">
             { `Tempo restante: ${currentCount}` }
           </p>
         </section>

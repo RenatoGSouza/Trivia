@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { playerAction, gravatarAction } from '../actions';
 import { triviaAPI } from '../Services/api';
 import '../style/login.css';
-import InputsLogin from '../components/InputsLogin';
-import ButtonsLogin from '../components/ButtonsLogin';
-import ImgLogin from '../components/ImgLogin';
+import InputsLogin from '../components/Login/InputsLogin';
+import ButtonsLogin from '../components/Login/ButtonsLogin';
+import ImgLogin from '../components/Login/ImgLogin';
 
 class Login extends React.Component {
   constructor(props) {

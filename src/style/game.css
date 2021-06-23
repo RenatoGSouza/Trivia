@@ -1,0 +1,19 @@
+.sectionPerguntas {
+  align-items: center;
+  background-image: url('../images/star-wars-wallpaper-9.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+}
+
+.question {
+  color: white;
+}
+
+.alternativas {
+  display: flex;
+  flex-direction: column;
+}

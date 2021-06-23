@@ -1,0 +1,23 @@
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.div-header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
+.btn-header {
+  margin: 10px;
+}
+
+.div-header-text {
+  color: white;
+  flex-direction: column;
+  margin: 0;
+}
