@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import md5 from 'crypto-js/md5';
+import { connect } from 'react-redux';
 
 class ImgHeader extends Component {
   constructor(props) {
@@ -8,12 +10,12 @@ class ImgHeader extends Component {
   }
 
   render() {
-    const { hash } = this.props;
-    const urlImg = `https://www.gravatar.com/avatar/${hash}`;
+    const { playerGravatar } = this.props;
+    console.log(playerGravatar);
     return (
       <div className="div-header">
         <img
-          src={ urlImg }
+          src={ `https://www.gravatar.com/avatar/${md5(playerGravatar).toString()}` }
           alt="Avatar do jogador"
           data-testid="header-profile-picture"
           className="header-profile-picture"
@@ -23,7 +25,10 @@ class ImgHeader extends Component {
   }
 }
 ImgHeader.propTypes = {
-  hash: PropTypes.string.isRequired,
+  playerGravatar: PropTypes.string.isRequired,
 };
 
-export default ImgHeader;
+const mapStateToProps = (state) => ({
+  playerGravatar: state.playerReducer.playerGravatar,
+});
+export default connect(mapStateToProps)(ImgHeader);

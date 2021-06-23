@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import '../style/feedback.css';
 
 class Feedbacks extends React.Component {
   componentDidMount() {
@@ -16,15 +17,31 @@ class Feedbacks extends React.Component {
     const THREE = 3;
 
     return (
-      <>
+      <div className="div-feedback">
         <Header />
-        <h1 data-testid="feedback-text">
+        <h1 className="feedback-text" data-testid="feedback-text">
           {assertionsCorrect >= THREE ? 'Mandou bem!' : 'Podia ser melhor...'}
         </h1>
-        <h2 data-testid="feedback-total-score">{playerScore}</h2>
-        <h2 data-testid="feedback-total-question">{assertionsCorrect}</h2>
-        <Link to="/" data-testid="btn-play-again">Jogar novamente</Link>
-      </>
+        <h2
+          className="feedback-text"
+          data-testid="feedback-total-score"
+        >
+          {playerScore}
+        </h2>
+        <h2
+          className="feedback-text"
+          data-testid="feedback-total-question"
+        >
+          {assertionsCorrect}
+        </h2>
+        <Link
+          to="/"
+          data-testid="btn-play-again"
+          className="btn-play-again"
+        >
+          Jogar novamente
+        </Link>
+      </div>
     );
   }
 }

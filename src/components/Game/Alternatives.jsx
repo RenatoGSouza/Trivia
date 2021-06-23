@@ -40,7 +40,7 @@ class Alternatives extends Component {
   }
 }
 Alternatives.propTypes = {
-  state: PropTypes.objectOf.isRequired,
+  state: PropTypes.objectOf(PropTypes.any).isRequired,
   buttonEffect: PropTypes.func.isRequired,
 };
 

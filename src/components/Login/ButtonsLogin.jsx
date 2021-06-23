@@ -38,7 +38,7 @@ class ButtonsLogin extends Component {
 
 ButtonsLogin.propTypes = {
   clickBtnJogar: PropTypes.func.isRequired,
-  validForm: PropTypes.string.isRequired,
+  validForm: PropTypes.bool.isRequired,
   redirect: PropTypes.func.isRequired,
 };
 
